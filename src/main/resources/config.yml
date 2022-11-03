@@ -1,0 +1,8 @@
+database:
+  #types: mysql, sqlite
+  type: 'sqlite'
+  ip: 'localhost:3306'
+  db: 'test'
+  user: 'root'
+  password: ''
+  table: 'orbital_economy'

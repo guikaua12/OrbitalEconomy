@@ -1,7 +1,5 @@
 package me.approximations.orbitalEconomy.util;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -10,10 +8,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import lombok.Getter;
-import org.bukkit.configuration.file.FileConfiguration;
 //credits: https://github.com/Langsdorf/UltraCooldown/blob/master/src/com/langsdorf/speedcode1/Cooldown.java
-public class Cooldown {
+public class CooldownUtils {
 	private static Map<String, Long> map = new HashMap<>();
 	
 	public static void addDelay(String id) {

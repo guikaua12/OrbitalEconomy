@@ -1,8 +1,8 @@
-package me.approximations.parkourPlugin.dao.repository;
+package me.approximations.orbitalEconomy.dao.repository;
 
 import com.jaoow.sql.executor.SQLExecutor;
-import me.approximations.parkourPlugin.Main;
-import me.approximations.parkourPlugin.model.User;
+import me.approximations.orbitalEconomy.Main;
+import me.approximations.orbitalEconomy.model.User;
 
 import java.sql.SQLException;
 import java.util.Set;
@@ -23,11 +23,11 @@ public class UserRepository{
 
 
     public void createTable() {
-        sqlExecutor.execute("CREATE TABLE IF NOT EXISTS "+TABLE+"(uuid VARCHAR(72), bestTime BIGINT);");
+        sqlExecutor.execute("CREATE TABLE IF NOT EXISTS "+TABLE+"(nick VARCHAR(72), balance DOUBLE);");
     }
 
     public void insertOrUpdate(User user) {
-        if(contains(user.getUuid())) {
+        if(contains(user.getNick())) {
             update(user);
         }else {
             insert(user);
@@ -37,8 +37,8 @@ public class UserRepository{
     public void insert(User user) {
         sqlExecutor.execute("INSERT INTO "+TABLE+" VALUES(?, ?);", c -> {
             try {
-                c.setString(1, user.getUuid().toString());
-                c.setLong(2, user.getBestTime());
+                c.setString(1, user.getNick());
+                c.setDouble(2, user.getBalance());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -46,34 +46,34 @@ public class UserRepository{
     }
 
     public void update(User user) {
-        sqlExecutor.execute("UPDATE "+TABLE+" SET bestTime = ? WHERE uuid = ?;", c -> {
+        sqlExecutor.execute("UPDATE "+TABLE+" SET balance = ? WHERE nick = ?;", c -> {
             try {
-                c.setLong(1, user.getBestTime());
-                c.setString(2, user.getUuid().toString());
+                c.setDouble(1, user.getBalance());
+                c.setString(2, user.getNick());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    public User get(UUID uuid) {
-        return sqlExecutor.query("SELECT * FROM "+TABLE+" WHERE uuid = ?;", c -> {
+    public User get(String nick) {
+        return sqlExecutor.query("SELECT * FROM "+TABLE+" WHERE nick = ?;", c -> {
             try {
-                c.setString(1, uuid.toString());
+                c.setString(1, nick);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }, User.class).orElse(null);
     }
 
-    public boolean contains(UUID uuid) {
-        return get(uuid) != null;
+    public boolean contains(String nick) {
+        return get(nick) != null;
     }
 
-    public void delete(UUID uuid) {
-        sqlExecutor.execute("DELETE FROM "+TABLE+" WHERE uuid = ?;", c -> {
+    public void delete(String nick) {
+        sqlExecutor.execute("DELETE FROM "+TABLE+" WHERE nick = ?;", c -> {
             try {
-                c.setString(1, uuid.toString());
+                c.setString(1, nick);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -82,9 +82,5 @@ public class UserRepository{
 
     public Set<User> getAll() {
         return sqlExecutor.queryMany("SELECT * FROM "+TABLE+";", User.class);
-    }
-
-    public Set<User> getTop5() {
-        return sqlExecutor.queryMany("SELECT * FROM "+TABLE+" ORDER BY bestTime ASC LIMIT 5;", User.class);
     }
 }
