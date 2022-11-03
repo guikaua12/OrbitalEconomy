@@ -23,7 +23,7 @@ public class UserRepository{
 
 
     public void createTable() {
-        sqlExecutor.execute("CREATE TABLE IF NOT EXISTS "+TABLE+"(nick VARCHAR(72), balance DOUBLE);");
+        sqlExecutor.execute("CREATE TABLE IF NOT EXISTS "+TABLE+"(nick VARCHAR(21) PRIMARY KEY, balance DOUBLE);");
     }
 
     public void insertOrUpdate(User user) {
