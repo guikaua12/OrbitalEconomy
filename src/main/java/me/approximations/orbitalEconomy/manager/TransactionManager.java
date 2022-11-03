@@ -58,6 +58,7 @@ public class TransactionManager {
             if(user == null) return new TransactionRequest(TransactionResult.INVALID_TARGET, 0);
 
             user.setBalance(user.getBalance()+amount);
+            userRepository.insertOrUpdate(user);
             return new TransactionRequest(TransactionResult.SUCCESS, amount);
         }else {
             User user = userRepository.get(target.getName());
